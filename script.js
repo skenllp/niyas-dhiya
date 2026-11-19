@@ -157,7 +157,6 @@ const CONFIG = {
   function initParallax() {
     const els = $$('[data-parallax]');
     if (!els.length) return;
-    const wide = window.matchMedia('(min-aspect-ratio: 1/1) and (min-width: 700px)');
     let ticking = false, visible = new Set(els);
     if ('IntersectionObserver' in window) {
       visible = new Set();
@@ -169,9 +168,9 @@ const CONFIG = {
       const vh = window.innerHeight;
       visible.forEach((el) => {
         const k = el.dataset.parallax;
-        if (k === 'hero') {
-          // the hero photo drifts down slightly as the page scrolls away (phones only; framed print on wide screens stays put)
-          el.style.setProperty('--py', wide.matches ? '0px' : `${Math.min(window.scrollY, vh) * 0.18}px`);
+        if (k === 'garland') {
+          // the hero garland drifts down a little as the page scrolls away, as in the original
+          el.style.setProperty('--py', `${Math.min(window.scrollY, 800) * 0.12}px`);
         } else {
           const r = el.getBoundingClientRect();
           // the image inside is scaled ~8%, so the drift is capped to stay within that margin (the child img inherits --py)

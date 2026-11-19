@@ -3,21 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#263B2D">
+  <meta name="theme-color" content="#F7F1E6">
 
   <title>Niyas &amp; Dhiya | Wedding Reception</title>
   <meta name="description" content="Join Niyas and Dhiya as they celebrate their wedding reception at Rockdale Resort, Vadapuram.">
 
-  <!-- Open Graph / WhatsApp preview.
-       After uploading, replace the two relative URLs below (og:url and og:image / twitter:image)
-       with absolute ones on your domain, e.g. https://your-domain.com/assets/og-image.jpg
-       — WhatsApp only shows the preview image reliably when the URL is absolute. -->
+  <!-- Open Graph / WhatsApp preview (absolute URLs on the live domain) -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="./">
+  <meta property="og:url" content="https://niyas-dhiya.vercel.app/">
+  <link rel="canonical" href="https://niyas-dhiya.vercel.app/">
   <meta property="og:site_name" content="Niyas &amp; Dhiya">
   <meta property="og:title" content="Niyas &amp; Dhiya | Wedding Reception">
   <meta property="og:description" content="Join Niyas and Dhiya as they celebrate their wedding reception at Rockdale Resort, Vadapuram.">
-  <meta property="og:image" content="assets/og-image.jpg">
+  <meta property="og:image" content="https://niyas-dhiya.vercel.app/assets/og-image.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -26,7 +24,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Niyas &amp; Dhiya | Wedding Reception">
   <meta name="twitter:description" content="Join Niyas and Dhiya as they celebrate their wedding reception at Rockdale Resort, Vadapuram.">
-  <meta name="twitter:image" content="assets/og-image.jpg">
+  <meta name="twitter:image" content="https://niyas-dhiya.vercel.app/assets/og-image.jpg">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,6 +33,8 @@
   <link rel="preload" as="image" href="assets/opening/envelope.webp" fetchpriority="high">
   <link rel="preload" as="image" href="assets/opening/seal.webp" fetchpriority="high">
   <link rel="preload" as="image" href="assets/opening/wallpaper.webp">
+  <link rel="preload" as="image" href="assets/art/greenery-top.webp">
+  <link rel="preload" as="image" href="assets/art/table.webp">
   <link rel="stylesheet" href="style.css">
 
   <noscript>
@@ -42,7 +42,7 @@
       html.is-locked, html.is-locked body { overflow: auto; height: auto; }
       .opening, .music-toggle { display: none !important; }
       .reveal { opacity: 1 !important; transform: none !important; }
-      .hero-photo img, .hero-bg { opacity: 1 !important; transform: none !important; }
+      .hero-table, .hero-greenery, .hero-chandelier { opacity: 1 !important; transform: none !important; animation: none !important; }
     </style>
   </noscript>
 </head>
@@ -79,30 +79,30 @@
   <!-- ============ INVITATION ============ -->
   <main class="invitation" id="invitation" tabindex="-1" aria-label="Wedding reception invitation of Niyas and Dhiya">
 
-    <!-- Hero -->
+    <!-- Hero: ivory stationery with a botanical garland, chandelier and dressed reception table (as in the original design) -->
     <section class="hero" aria-labelledby="couple-heading">
-      <div class="hero-bg" aria-hidden="true"><img src="assets/couple/sm/WFP03408_resized.jpg" alt="" width="640" height="960" decoding="async"></div>
-      <figure class="hero-photo" data-parallax="hero">
-        <img src="assets/couple/WFP03408_resized.jpg"
-             srcset="assets/couple/sm/WFP03408_resized.jpg 640w, assets/couple/WFP03408_resized.jpg 1280w"
-             sizes="(min-aspect-ratio: 1/1) and (min-width: 700px) 60vh, 150vw"
-             width="1280" height="1920" decoding="async" fetchpriority="high"
-             alt="Niyas and Dhiya with their vintage mint-green scooter on a palm-fringed path — Niyas laughing on the scooter as Dhiya playfully pushes it">
-      </figure>
-      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="hero-top" aria-hidden="true">
+        <div class="hero-greenery" data-parallax="garland"><img src="assets/art/greenery-top.webp" alt="" width="1600" height="234" decoding="async"></div>
+        <div class="hero-chandelier"><img src="assets/art/chandelier.webp" alt="" width="680" height="1011" decoding="async"></div>
+      </div>
 
       <div class="hero-content">
-        <p class="hero-eyebrow reveal" style="--d:.15s">A Beautiful Beginning</p>
+        <img class="hero-divider reveal" style="--d:.1s" src="assets/art/divider.svg" alt="" width="240" height="40" aria-hidden="true">
+        <p class="hero-eyebrow reveal" style="--d:.2s">A Beautiful Beginning</p>
         <h1 class="names" id="couple-heading">
-          <span class="name reveal reveal--name" style="--d:.35s">Niyas</span>
+          <span class="name reveal reveal--name" style="--d:.4s">Niyas</span>
           <span class="amp reveal" style="--d:.55s"><span class="sr-only">and</span><span aria-hidden="true">&amp;</span></span>
           <span class="name reveal reveal--name" style="--d:.7s">Dhiya</span>
         </h1>
-        <p class="hero-function reveal" style="--d:.95s">Wedding Reception</p>
-        <p class="hero-quote reveal" style="--d:1.15s">“Together is a beautiful place to be.”</p>
+        <p class="hero-function reveal" style="--d:.9s">Wedding Reception</p>
+        <p class="hero-quote reveal" style="--d:1.05s">“Together is a beautiful place to be.”</p>
       </div>
 
-      <a class="scroll-cue reveal" style="--d:1.6s" href="#families">
+      <div class="hero-table reveal reveal--soft" style="--d:.4s" aria-hidden="true">
+        <img src="assets/art/table.webp" alt="" width="1185" height="782" decoding="async">
+      </div>
+
+      <a class="scroll-cue reveal" style="--d:1.5s" href="#families">
         <span class="scroll-cue__text">Scroll</span>
         <span class="scroll-cue__line" aria-hidden="true"></span>
         <span class="sr-only"> to the invitation</span>
@@ -346,7 +346,7 @@
     </section>
 
     <footer class="site-foot">
-      <p>Pre-wedding photographs · Stories from Western Frames</p>
+      <p>Developed by <a href="https://sahilmuhd.com/" target="_blank" rel="noopener noreferrer">Sahil<span class="sr-only"> (opens in a new tab)</span></a></p>
     </footer>
   </main>
 

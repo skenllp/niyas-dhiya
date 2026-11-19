@@ -18,10 +18,8 @@ UPLOADING (Hostinger or any static host)
   panel shows "Date to be announced".
 
 2) WHATSAPP PREVIEW
-  In index.html, replace the relative URLs in og:url, og:image and twitter:image
-  with absolute ones on your domain, e.g.
-      https://your-domain.com/assets/og-image.jpg
-  WhatsApp only shows the preview image reliably with an absolute URL.
+  index.html points og:url / og:image at https://niyas-dhiya.vercel.app/ .
+  If the domain changes, update those three URLs (og:url, og:image, twitter:image) and the canonical link.
   WhatsApp caches previews, so test with a new link or a fresh chat.
 
 OTHER DETAILS (all in CONFIG in script.js)
