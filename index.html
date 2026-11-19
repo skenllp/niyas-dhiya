@@ -1,372 +1,272 @@
 <!DOCTYPE html>
-<html lang="en" class="is-locked">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#263B2D">
+  <title>Asber &amp; Jennifer — Wedding Invitation</title>
+  <meta name="description" content="You are cordially invited to the wedding of Asber &amp; Jennifer on Saturday, 2 January 2027 at 11:30 AM, Parappan Square International Convention Centre, Venniyur, Malappuram.">
+  <meta name="theme-color" content="#392B20">
 
-  <title>Niyas &amp; Dhiya | Wedding Reception</title>
-  <meta name="description" content="Join Niyas and Dhiya as they celebrate their wedding reception at Rockdale Resort, Vadapuram.">
-
-  <!-- Open Graph / WhatsApp preview.
-       After uploading, replace the two relative URLs below (og:url and og:image / twitter:image)
-       with absolute ones on your domain, e.g. https://your-domain.com/assets/og-image.jpg
-       — WhatsApp only shows the preview image reliably when the URL is absolute. -->
+  <!-- Social preview -->
+  <link rel="canonical" href="https://asber-jennifer.vercel.app/">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="./">
-  <meta property="og:site_name" content="Niyas &amp; Dhiya">
-  <meta property="og:title" content="Niyas &amp; Dhiya | Wedding Reception">
-  <meta property="og:description" content="Join Niyas and Dhiya as they celebrate their wedding reception at Rockdale Resort, Vadapuram.">
-  <meta property="og:image" content="assets/og-image.jpg">
-  <meta property="og:image:type" content="image/jpeg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Niyas and Dhiya beneath a canopy of leaves — Wedding Reception at Rockdale Resort">
-  <meta property="og:locale" content="en_IN">
+  <meta property="og:url" content="https://asber-jennifer.vercel.app/">
+  <meta property="og:title" content="Asber &amp; Jennifer — Wedding Invitation">
+  <meta property="og:description" content="Saturday, 2 January 2027 · 11:30 AM · Parappan Square International Convention Centre, Venniyur, Malappuram">
+  <meta property="og:image" content="https://asber-jennifer.vercel.app/assets/og-invitation.jpg">
+  <meta property="og:image:width" content="941">
+  <meta property="og:image:height" content="1671">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Niyas &amp; Dhiya | Wedding Reception">
-  <meta name="twitter:description" content="Join Niyas and Dhiya as they celebrate their wedding reception at Rockdale Resort, Vadapuram.">
-  <meta name="twitter:image" content="assets/og-image.jpg">
+  <meta name="twitter:image" content="https://asber-jennifer.vercel.app/assets/og-invitation.jpg">
 
+  <link rel="preload" as="image" href="assets/opening-bg.webp" type="image/webp">
+  <link rel="preload" as="image" href="assets/countryside.webp" type="image/webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=Pinyon+Script&display=swap" rel="stylesheet">
-
-  <link rel="preload" as="image" href="assets/opening/envelope.webp" fetchpriority="high">
-  <link rel="preload" as="image" href="assets/opening/seal.webp" fetchpriority="high">
-  <link rel="preload" as="image" href="assets/opening/wallpaper.webp">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-
-  <noscript>
-    <style>
-      html.is-locked, html.is-locked body { overflow: auto; height: auto; }
-      .opening, .music-toggle { display: none !important; }
-      .reveal { opacity: 1 !important; transform: none !important; }
-      .hero-photo img, .hero-bg { opacity: 1 !important; transform: none !important; }
-    </style>
-  </noscript>
 </head>
 <body>
-  <a class="skip-link" href="#reception">Skip to reception details</a>
 
-  <!-- ============ OPENING ENVELOPE ============ -->
-  <!-- Tap the wax seal -> the flap lifts toward the viewer -> a soft ivory wash rises -> the hero photograph is revealed.
-       Layers inside .scene, bottom to top: sage lining -> pocket (envelope with the flap cut out) -> flap (carries the seal). -->
-  <section class="opening" id="opening" aria-label="Invitation envelope">
-    <div class="op-bg" aria-hidden="true"></div>
-    <div class="op-stage">
-      <div class="scene" id="env">
-        <div class="env-in" aria-hidden="true"></div>
-        <img class="env-pocket" src="assets/opening/envelope.webp" alt="" width="1149" height="2181" fetchpriority="high" decoding="async">
-        <div class="env-flap" id="flap">
-          <div class="flap-face" aria-hidden="true"></div>
-          <button type="button" class="open-seal" id="open-btn" aria-label="Open the wedding reception invitation of Niyas and Dhiya" aria-describedby="seal-hint">
-            <span class="seal" aria-hidden="true"><img src="assets/opening/seal.webp" alt="" width="504" height="512"></span>
-          </button>
+  <!-- ============ SCENE 1 — CINEMATIC OPENING ============ -->
+  <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="Wedding invitation opening">
+    <div class="intro__scene">
+      <img class="intro__backdrop" src="assets/opening-bg.webp" alt="" aria-hidden="true" width="963" height="1633">
+      <div class="intro__stage" id="introFrame" data-fit data-fit-max="1">
+        <img class="intro__art" src="assets/opening-bg.webp" alt="" width="963" height="1633" fetchpriority="high">
+        <div class="fit-box">
+          <div class="fit-content intro__content">
+            <p class="intro__label">The Wedding of</p>
+            <p class="intro__names" aria-label="Asber and Jennifer">
+              <span>Asber</span>
+              <span class="amp" aria-hidden="true">&amp;</span>
+              <span>Jennifer</span>
+            </p>
+            <button type="button" class="intro__enter" id="enterBtn">Open</button>
+          </div>
         </div>
-      </div>
-      <div class="op-text" aria-hidden="true">
-        <p class="op-couple">Niyas <span>&amp;</span> Dhiya</p>
-      </div>
-      <div class="op-text op-text--low">
-        <p class="op-invited">You’re Invited</p>
-        <p class="seal-label" id="seal-hint">Tap the seal to open</p>
       </div>
     </div>
-    <div class="op-wash" aria-hidden="true"></div>
-  </section>
-
-  <!-- ============ INVITATION ============ -->
-  <main class="invitation" id="invitation" tabindex="-1" aria-label="Wedding reception invitation of Niyas and Dhiya">
-
-    <!-- Hero -->
-    <section class="hero" aria-labelledby="couple-heading">
-      <div class="hero-bg" aria-hidden="true"><img src="assets/couple/sm/WFP03408_resized.jpg" alt="" width="640" height="960" decoding="async"></div>
-      <figure class="hero-photo" data-parallax="hero">
-        <img src="assets/couple/WFP03408_resized.jpg"
-             srcset="assets/couple/sm/WFP03408_resized.jpg 640w, assets/couple/WFP03408_resized.jpg 1280w"
-             sizes="(min-aspect-ratio: 1/1) and (min-width: 700px) 60vh, 150vw"
-             width="1280" height="1920" decoding="async" fetchpriority="high"
-             alt="Niyas and Dhiya with their vintage mint-green scooter on a palm-fringed path — Niyas laughing on the scooter as Dhiya playfully pushes it">
-      </figure>
-      <div class="hero-shade" aria-hidden="true"></div>
-
-      <div class="hero-content">
-        <p class="hero-eyebrow reveal" style="--d:.15s">A Beautiful Beginning</p>
-        <h1 class="names" id="couple-heading">
-          <span class="name reveal reveal--name" style="--d:.35s">Niyas</span>
-          <span class="amp reveal" style="--d:.55s"><span class="sr-only">and</span><span aria-hidden="true">&amp;</span></span>
-          <span class="name reveal reveal--name" style="--d:.7s">Dhiya</span>
-        </h1>
-        <p class="hero-function reveal" style="--d:.95s">Wedding Reception</p>
-        <p class="hero-quote reveal" style="--d:1.15s">“Together is a beautiful place to be.”</p>
-      </div>
-
-      <a class="scroll-cue reveal" style="--d:1.6s" href="#families">
-        <span class="scroll-cue__text">Scroll</span>
-        <span class="scroll-cue__line" aria-hidden="true"></span>
-        <span class="sr-only"> to the invitation</span>
-      </a>
-    </section>
-
-    <!-- Families -->
-    <section class="section families" id="families" aria-labelledby="families-heading">
-      <div class="container container--narrow">
-        <img class="sprig reveal" src="assets/art/divider.svg" alt="" width="240" height="40" aria-hidden="true" loading="lazy">
-        <h2 class="section-title reveal" id="families-heading" style="--d:.1s">With the blessings of our families</h2>
-        <p class="families-intro reveal" style="--d:.2s">Together with our families, we warmly invite you to join us as we celebrate our wedding reception.</p>
-
-        <div class="family-grid">
-          <article class="family-card reveal" style="--d:.1s" aria-labelledby="groom-name">
-            <p class="family-role">The Groom</p>
-            <h3 class="family-name" id="groom-name">Niyas</h3>
-            <p class="family-rel">Son of</p>
-            <p class="family-parents"><span class="nw">Mr. Shoukathali</span> <span class="amp-s">&amp;</span> <span class="nw">Mrs. Sakeena</span></p>
-            <span class="rule" aria-hidden="true"></span>
-            <address class="family-address">Belladi House,<br>Pongallur, Mampad P.O.,<br>Malappuram, Kerala.</address>
-          </article>
-
-          <div class="family-join reveal" style="--d:.2s" aria-hidden="true"><span>&amp;</span></div>
-
-          <article class="family-card reveal" style="--d:.3s" aria-labelledby="bride-name">
-            <p class="family-role">The Bride</p>
-            <h3 class="family-name" id="bride-name">Dhiya</h3>
-            <p class="family-rel">Daughter of</p>
-            <p class="family-parents"><span class="nw">Mr. Abdul Basheer</span> <span class="amp-s">&amp;</span> <span class="nw">Mrs. Mini</span></p>
-            <span class="rule" aria-hidden="true"></span>
-            <address class="family-address">Parappurath House,<br>Mampad P.O., Pongallur,<br>Malappuram, Kerala.</address>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Love story -->
-    <section class="section story" id="story" aria-labelledby="story-heading">
-      <div class="container">
-        <header class="section-head">
-          <p class="script-accent reveal" aria-hidden="true">our story</p>
-          <h2 class="section-title reveal" id="story-heading" style="--d:.1s">Our Little Love Story</h2>
-          <p class="section-sub reveal" style="--d:.2s">Some journeys are even more beautiful together.</p>
-        </header>
-
-        <div class="story-grid">
-          <figure class="story-lead reveal reveal--photo">
-            <div class="frame" data-parallax="0.06">
-              <img src="assets/couple/WFP02841_1_resized.jpg" srcset="assets/couple/sm/WFP02841_1_resized.jpg 640w, assets/couple/WFP02841_1_resized.jpg 1280w" sizes="(min-width: 900px) 46vw, 92vw" width="1280" height="1920" loading="lazy" decoding="async" alt="Dhiya laughing as she sits on a grassy slope while Niyas leans in close">
-            </div>
-          </figure>
-          <figure class="story-a reveal reveal--photo" style="--d:.1s">
-            <div class="frame">
-              <img src="assets/couple/sm/WFP02765_resized.jpg" srcset="assets/couple/sm/WFP02765_resized.jpg 640w, assets/couple/WFP02765_resized.jpg 1280w" sizes="(min-width: 900px) 24vw, 45vw" width="640" height="960" loading="lazy" decoding="async" alt="Niyas and Dhiya running hand in hand across the lawn">
-            </div>
-          </figure>
-          <figure class="story-b reveal reveal--photo" style="--d:.2s">
-            <div class="frame">
-              <img src="assets/couple/sm/WFP02673_resized.jpg" srcset="assets/couple/sm/WFP02673_resized.jpg 640w, assets/couple/WFP02673_resized.jpg 1280w" sizes="(min-width: 900px) 24vw, 45vw" width="640" height="960" loading="lazy" decoding="async" alt="Niyas and Dhiya in a warm embrace beneath the trees">
-            </div>
-          </figure>
-          <p class="story-caption reveal" style="--d:.15s">Hand in hand, wherever the road may lead.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Reception details -->
-    <section class="section reception" id="reception" aria-labelledby="reception-heading">
-      <div class="arch-panel">
-        <img class="sprig sprig--light reveal" src="assets/art/divider-light.svg" alt="" width="240" height="40" aria-hidden="true" loading="lazy">
-        <h2 class="section-title reveal" id="reception-heading" style="--d:.1s">The Wedding Reception</h2>
-
-        <dl class="details">
-          <!-- Shown automatically once CONFIG.event.date is set in script.js -->
-          <div class="detail detail--date reveal" id="date-block" hidden>
-            <dt>Date</dt>
-            <dd><span class="detail-weekday" id="date-weekday"></span><time class="detail-big" id="date-value"></time></dd>
-          </div>
-          <div class="detail reveal" style="--d:.15s">
-            <dt>Time</dt>
-            <dd><time class="detail-big" datetime="17:00" data-bind="time">5:00 PM onwards</time></dd>
-          </div>
-          <div class="detail reveal" style="--d:.25s">
-            <dt>Venue</dt>
-            <dd class="detail-big" data-bind="venue-name">Rockdale Resort</dd>
-          </div>
-          <div class="detail reveal" style="--d:.35s">
-            <dt>Location</dt>
-            <dd class="detail-sm">Vadapuram, behind HiLITE Mall,<br>Malappuram, Kerala.</dd>
-          </div>
-        </dl>
-
-        <p class="date-pending reveal" id="date-pending" style="--d:.45s">Date to be announced</p>
-
-        <div class="countdown" id="countdown" role="timer" aria-live="off" aria-label="Time remaining until the wedding reception" hidden>
-          <div class="cd-unit"><span class="cd-num" data-unit="days">00</span><span class="cd-label">Days</span></div>
-          <div class="cd-unit"><span class="cd-num" data-unit="hours">00</span><span class="cd-label">Hours</span></div>
-          <div class="cd-unit"><span class="cd-num" data-unit="minutes">00</span><span class="cd-label">Minutes</span></div>
-          <div class="cd-unit"><span class="cd-num" data-unit="seconds">00</span><span class="cd-label">Seconds</span></div>
-        </div>
-        <p class="countdown-done" id="countdown-done" hidden>The celebration has begun. We can’t wait to see you.</p>
-      </div>
-    </section>
-
-    <!-- Venue -->
-    <section class="section venue" id="venue" aria-labelledby="venue-heading">
-      <div class="venue-panel">
-        <i class="corner corner--tl" aria-hidden="true"></i><i class="corner corner--br" aria-hidden="true"></i>
-        <p class="eyebrow reveal">The Venue</p>
-        <h2 class="venue-title reveal" id="venue-heading" style="--d:.1s">Join Us at <span>Rockdale Resort</span></h2>
-        <img class="sprig reveal" style="--d:.2s" src="assets/art/divider.svg" alt="" width="240" height="40" aria-hidden="true" loading="lazy">
-        <address class="venue-address reveal" style="--d:.25s">Vadapuram, behind HiLITE Mall,<br>Malappuram, Kerala.</address>
-
-        <div class="actions reveal" style="--d:.35s">
-          <a class="btn btn--solid" id="directions-btn" data-bind="maps" href="https://maps.app.goo.gl/fGqiztXiYJxjDmhS6?g_st=iw" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 21s-6.5-6.1-6.5-11A6.5 6.5 0 0 1 18.5 10c0 4.9-6.5 11-6.5 11z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-            Get Directions<span class="sr-only"> to Rockdale Resort on Google Maps (opens in a new tab)</span>
-          </a>
-          <button type="button" class="btn" id="calendar-btn" disabled aria-describedby="calendar-note">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="5.5" width="16" height="14.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            Add to Calendar
-          </button>
-          <p class="calendar-note" id="calendar-note">Calendar saving opens once the date is announced.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Gallery -->
-    <section class="section gallery" id="gallery" aria-labelledby="gallery-heading">
-      <div class="container container--wide">
-        <header class="section-head">
-          <p class="script-accent reveal" aria-hidden="true">moments</p>
-          <h2 class="section-title reveal" id="gallery-heading" style="--d:.1s">Captured Moments</h2>
-          <p class="section-sub reveal" style="--d:.2s">A collection of moments close to our hearts.</p>
-        </header>
-        <ul class="gallery-grid" id="gallery-grid" role="list">
-        <li class="g-item reveal" style="--d:0.00s">
-          <button type="button" class="g-btn" data-index="0" data-full="assets/couple/WFP03053_resized.jpg" aria-label="Open photo 1 of 17 in full screen">
-            <img src="assets/couple/sm/WFP03053_resized.jpg" srcset="assets/couple/sm/WFP03053_resized.jpg 640w, assets/couple/WFP03053_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Niyas seated on the mint-green vintage scooter with Dhiya leaning in beside him, both smiling at the camera">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.08s">
-          <button type="button" class="g-btn" data-index="1" data-full="assets/couple/WFP02765_resized.jpg" aria-label="Open photo 2 of 17 in full screen">
-            <img src="assets/couple/sm/WFP02765_resized.jpg" srcset="assets/couple/sm/WFP02765_resized.jpg 640w, assets/couple/WFP02765_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Niyas and Dhiya running hand in hand across the grass">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.16s">
-          <button type="button" class="g-btn" data-index="2" data-full="assets/couple/WFP03366_resized.jpg" aria-label="Open photo 3 of 17 in full screen">
-            <img src="assets/couple/sm/WFP03366_resized.jpg" srcset="assets/couple/sm/WFP03366_resized.jpg 640w, assets/couple/WFP03366_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Niyas and Dhiya touching foreheads over the scooter’s handlebars on a palm-lined path">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.00s">
-          <button type="button" class="g-btn" data-index="3" data-full="assets/couple/WFP02511_resized.jpg" aria-label="Open photo 4 of 17 in full screen">
-            <img src="assets/couple/sm/WFP02511_resized.jpg" srcset="assets/couple/sm/WFP02511_resized.jpg 640w, assets/couple/WFP02511_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Niyas and Dhiya standing hand in hand on the lawn, smiling at the camera">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.08s">
-          <button type="button" class="g-btn" data-index="4" data-full="assets/couple/WFP02665_resized.jpg" aria-label="Open photo 5 of 17 in full screen">
-            <img src="assets/couple/sm/WFP02665_resized.jpg" srcset="assets/couple/sm/WFP02665_resized.jpg 640w, assets/couple/WFP02665_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Niyas gently adjusting Dhiya’s scarf beneath a canopy of leaves">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.16s">
-          <button type="button" class="g-btn" data-index="5" data-full="assets/couple/WFP03204_resized.jpg" aria-label="Open photo 6 of 17 in full screen">
-            <img src="assets/couple/sm/WFP03204_resized.jpg" srcset="assets/couple/sm/WFP03204_resized.jpg 640w, assets/couple/WFP03204_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Dhiya seated on the scooter, smiling up at Niyas as he stands on the laterite steps">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.00s">
-          <button type="button" class="g-btn" data-index="6" data-full="assets/couple/WFP02483_resized.jpg" aria-label="Open photo 7 of 17 in full screen">
-            <img src="assets/couple/sm/WFP02483_resized.jpg" srcset="assets/couple/sm/WFP02483_resized.jpg 640w, assets/couple/WFP02483_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Niyas and Dhiya holding hands and smiling playfully at the camera">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.08s">
-          <button type="button" class="g-btn" data-index="7" data-full="assets/couple/WFP02832_resized.jpg" aria-label="Open photo 8 of 17 in full screen">
-            <img src="assets/couple/sm/WFP02832_resized.jpg" srcset="assets/couple/sm/WFP02832_resized.jpg 640w, assets/couple/WFP02832_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Niyas leaning down to touch foreheads with Dhiya as she sits on a grassy slope">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.16s">
-          <button type="button" class="g-btn" data-index="8" data-full="assets/couple/WFP03287_resized.jpg" aria-label="Open photo 9 of 17 in full screen">
-            <img src="assets/couple/sm/WFP03287_resized.jpg" srcset="assets/couple/sm/WFP03287_resized.jpg 640w, assets/couple/WFP03287_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Niyas holding Dhiya’s hand as she steps down the laterite steps, the scooter parked in front">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.00s">
-          <button type="button" class="g-btn" data-index="9" data-full="assets/couple/WFP02573_resized.jpg" aria-label="Open photo 10 of 17 in full screen">
-            <img src="assets/couple/sm/WFP02573_resized.jpg" srcset="assets/couple/sm/WFP02573_resized.jpg 640w, assets/couple/WFP02573_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Dhiya walking ahead and smiling at the camera while Niyas follows behind">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.08s">
-          <button type="button" class="g-btn" data-index="10" data-full="assets/couple/WFP03408_resized.jpg" aria-label="Open photo 11 of 17 in full screen">
-            <img src="assets/couple/sm/WFP03408_resized.jpg" srcset="assets/couple/sm/WFP03408_resized.jpg 640w, assets/couple/WFP03408_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Niyas laughing on the scooter as Dhiya playfully pushes it from behind">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.16s">
-          <button type="button" class="g-btn" data-index="11" data-full="assets/couple/WFP02734_resized.jpg" aria-label="Open photo 12 of 17 in full screen">
-            <img src="assets/couple/sm/WFP02734_resized.jpg" srcset="assets/couple/sm/WFP02734_resized.jpg 640w, assets/couple/WFP02734_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Niyas walking behind Dhiya with his hands on her shoulders, both laughing">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.00s">
-          <button type="button" class="g-btn" data-index="12" data-full="assets/couple/WFP02426_resized.jpg" aria-label="Open photo 13 of 17 in full screen">
-            <img src="assets/couple/sm/WFP02426_resized.jpg" srcset="assets/couple/sm/WFP02426_resized.jpg 640w, assets/couple/WFP02426_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Niyas leading Dhiya by the hand across the lawn among tall palms">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.08s">
-          <button type="button" class="g-btn" data-index="13" data-full="assets/couple/WFP03058_resized.jpg" aria-label="Open photo 14 of 17 in full screen">
-            <img src="assets/couple/sm/WFP03058_resized.jpg" srcset="assets/couple/sm/WFP03058_resized.jpg 640w, assets/couple/WFP03058_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Niyas sitting on the scooter with a helmet as Dhiya leans in towards him">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.16s">
-          <button type="button" class="g-btn" data-index="14" data-full="assets/couple/WFP02673_resized.jpg" aria-label="Open photo 15 of 17 in full screen">
-            <img src="assets/couple/sm/WFP02673_resized.jpg" srcset="assets/couple/sm/WFP02673_resized.jpg 640w, assets/couple/WFP02673_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Niyas and Dhiya in a warm embrace under the trees">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.00s">
-          <button type="button" class="g-btn" data-index="15" data-full="assets/couple/WFP02451_resized.jpg" aria-label="Open photo 16 of 17 in full screen">
-            <img src="assets/couple/sm/WFP02451_resized.jpg" srcset="assets/couple/sm/WFP02451_resized.jpg 640w, assets/couple/WFP02451_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Dhiya and Niyas holding hands on the lawn, Dhiya glancing at the camera">
-          </button>
-        </li>
-        <li class="g-item reveal" style="--d:0.08s">
-          <button type="button" class="g-btn" data-index="16" data-full="assets/couple/WFP02841_1_resized.jpg" aria-label="Open photo 17 of 17 in full screen">
-            <img src="assets/couple/sm/WFP02841_1_resized.jpg" srcset="assets/couple/sm/WFP02841_1_resized.jpg 640w, assets/couple/WFP02841_1_resized.jpg 1280w" sizes="(min-width: 1180px) 370px, (min-width: 760px) 31vw, 46vw" width="640" height="960" loading="lazy" decoding="async" alt="Dhiya laughing on the grass as Niyas leans in close">
-          </button>
-        </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- Closing -->
-    <section class="closing" id="closing" aria-labelledby="closing-heading">
-      <div class="closing-bg" aria-hidden="true"><img src="assets/couple/sm/WFP02665_resized.jpg" alt="" width="640" height="960" loading="lazy" decoding="async"></div>
-      <figure class="closing-photo" data-parallax="0.05">
-        <img src="assets/couple/WFP02665_resized.jpg" srcset="assets/couple/sm/WFP02665_resized.jpg 640w, assets/couple/WFP02665_resized.jpg 1280w" sizes="(min-aspect-ratio: 1/1) and (min-width: 700px) 60vh, 150vw" width="1280" height="1920" loading="lazy" decoding="async" alt="Niyas gently adjusting Dhiya’s scarf as they stand together beneath a canopy of leaves">
-      </figure>
-      <div class="closing-shade" aria-hidden="true"></div>
-      <div class="closing-content">
-        <h2 class="closing-title reveal" id="closing-heading"><span class="closing-pre">With Love,</span> <span class="closing-names">Niyas &amp; Dhiya</span></h2>
-        <p class="closing-text reveal" style="--d:.15s">Your presence and blessings will make our celebration even more special.</p>
-        <img class="sprig sprig--light reveal" style="--d:.25s" src="assets/art/divider-light.svg" alt="" width="240" height="40" aria-hidden="true" loading="lazy">
-        <p class="closing-regards reveal" style="--d:.3s">With Love &amp; Warm Regards</p>
-        <p class="closing-families reveal" style="--d:.4s">Families of Niyas &amp; Dhiya</p>
-      </div>
-    </section>
-
-    <footer class="site-foot">
-      <p>Pre-wedding photographs · Stories from Western Frames</p>
-    </footer>
-  </main>
-
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
-    <figure class="lb-figure">
-      <img class="lb-img" id="lb-img" src="" alt="" width="1280" height="1920" decoding="async">
-      <figcaption class="lb-count" id="lb-count" aria-live="polite"></figcaption>
-    </figure>
-    <button type="button" class="lb-btn lb-close" id="lb-close" aria-label="Close photo viewer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
-    <button type="button" class="lb-btn lb-prev" id="lb-prev" aria-label="Previous photo"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <button type="button" class="lb-btn lb-next" id="lb-next" aria-label="Next photo"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   </div>
 
-  <audio id="bgm" src="assets/music.mp3" loop preload="none"></audio>
-  <button type="button" class="music-toggle" id="music-toggle" aria-label="Play music" aria-pressed="false">
-    <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a7.6 7.6 0 0 1 0 11"/></svg>
-    <svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
-  </button>
+  <main id="top">
 
+    <!-- ============ SCENE 2 — MAIN HERO + MUSIC PLAYER ============ -->
+    <section class="hero" id="home" aria-labelledby="heroTitle">
+      <div class="bg" aria-hidden="true">
+        <img src="assets/countryside.webp" alt="" width="1672" height="941">
+      </div>
+      <div class="hero__veil" aria-hidden="true"></div>
+
+      <div class="hero__inner">
+        <p class="label hero__label">The Wedding of</p>
+        <h1 class="names hero__names" id="heroTitle">
+          <span class="n">Asber</span>
+          <span class="amp" aria-hidden="true">&amp;</span>
+          <span class="n">Jennifer</span>
+        </h1>
+        <p class="hero__date"><time datetime="2027-01-02">Saturday, 2 January 2027</time></p>
+
+        <div class="hero__stage">
+          <img class="hero__mansion" src="assets/mansion.png" alt="Decorative illustration of an ornate Baroque mansion" width="1000" height="808">
+
+          <div class="player">
+            <svg class="tonearm" id="tonearm" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+              <circle cx="84" cy="12" r="8" fill="#B89B6A" stroke="#392B20" stroke-width="1.5"/>
+              <path d="M84 12 L74 52 L58 76" fill="none" stroke="#E9D6B0" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="49" y="72" width="14" height="8" rx="2" transform="rotate(-30 56 76)" fill="#B89B6A" stroke="#392B20" stroke-width="1.2"/>
+            </svg>
+            <button type="button" class="vinyl" id="musicBtn" aria-pressed="false" aria-label="Play wedding music">
+              <img class="vinyl__disc" src="assets/vinyl-record.png" alt="" width="640" height="632">
+              <span class="vinyl__icon" aria-hidden="true">
+                <svg class="i-play" viewBox="0 0 24 24" focusable="false"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
+                <svg class="i-pause" viewBox="0 0 24 24" focusable="false"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z" fill="currentColor"/></svg>
+              </span>
+            </button>
+            <p class="player__note" id="musicNote" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+      </div>
+      <audio id="bgm" loop preload="none" src="assets/wedding-music.mp3"></audio>
+    </section>
+
+    <!-- ============ SCENE 3 — COUNTDOWN ============ -->
+    <section class="count" id="countdown" aria-labelledby="countTitle">
+      <img class="count__divider" src="assets/gold-divider.png" alt="" width="1400" height="178" loading="lazy" data-reveal>
+      <h2 class="script-h" id="countTitle" data-reveal>Counting Days</h2>
+      <div class="count__grid" id="countGrid" role="timer" aria-label="Time remaining until the wedding" data-reveal>
+        <div class="unit"><span class="num" id="cdDays">00</span><span class="cap">Days</span></div>
+        <span class="sep" aria-hidden="true">:</span>
+        <div class="unit"><span class="num" id="cdHours">00</span><span class="cap">Hours</span></div>
+        <span class="sep" aria-hidden="true">:</span>
+        <div class="unit"><span class="num" id="cdMinutes">00</span><span class="cap">Minutes</span></div>
+        <span class="sep" aria-hidden="true">:</span>
+        <div class="unit"><span class="num" id="cdSeconds">00</span><span class="cap">Seconds</span></div>
+      </div>
+      <p class="count__done" id="countDone" hidden>The celebration has begun. Thank you for your prayers and blessings.</p>
+    </section>
+
+    <!-- ============ SCENE 4 — FORMAL WEDDING INVITATION ============ -->
+    <section class="invite" id="invitation" aria-labelledby="inviteTitle">
+      <div class="bg" aria-hidden="true">
+        <img src="assets/countryside.webp" alt="" width="1672" height="941" loading="lazy">
+      </div>
+      <img class="invite__rose invite__rose--l" src="assets/rose-vine.png" alt="" width="640" height="1603" loading="lazy">
+      <img class="invite__rose invite__rose--r" src="assets/rose-vine.png" alt="" width="640" height="1603" loading="lazy">
+
+      <article class="invite__card" id="inviteCard" data-fit>
+        <div class="paper" aria-hidden="true"></div>
+        <img class="frame-img" src="assets/invitation-frame.png" alt="" width="934" height="1515" loading="lazy">
+        <div class="fit-box">
+          <div class="fit-content invite__content">
+            <h2 class="il il-bismillah" id="inviteTitle">In the name of Allah, the Most Gracious, the Most Merciful.</h2>
+
+            <div class="il il-parents">
+              <p>Dr. Mohammed Saleem K.</p>
+              <p class="and" aria-hidden="true">&amp;</p>
+              <p>Dr. Fathimathul Zohara K.</p>
+            </div>
+
+            <img class="il il-rule" src="assets/gold-divider.png" alt="" width="1400" height="178" loading="lazy">
+
+            <p class="il il-wording">Together with their family, we cordially invite you to celebrate the wedding of their beloved son.</p>
+
+            <p class="il il-names" aria-label="Asber and Jennifer">
+              <span>Asber</span>
+              <span class="amp" aria-hidden="true">&amp;</span>
+              <span>Jennifer</span>
+            </p>
+
+            <p class="il il-parentsbride">D/O: Mr. Abdul Majeed Kanhirandy <span class="amp-s">&amp;</span> Mrs. Saira Aboobacker</p>
+
+            <img class="il il-rule" src="assets/gold-divider.png" alt="" width="1400" height="178" loading="lazy">
+
+            <p class="il il-date">
+              <span class="day">Saturday</span>
+              <time datetime="2027-01-02T11:30:00+05:30">2 January 2027</time>
+            </p>
+            <p class="il il-time">11:30 AM</p>
+
+            <img class="il il-rule" src="assets/gold-divider.png" alt="" width="1400" height="178" loading="lazy">
+
+            <address class="il il-venue">
+              <span class="v-label">Venue</span>
+              <span class="v-name">Parappan Square International Convention Centre,</span>
+              <span class="v-addr">Parapan Square Road, NH 66, Venniyur, Malappuram, Kerala – 676508.</span>
+            </address>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============ SCENE 5 — VENUE DETAILS ============ -->
+    <section class="venue" id="venue" aria-labelledby="venueTitle">
+      <img class="venue__art" src="assets/mansion.png" alt="Decorative illustration of an ornate Baroque building (artwork, not a photograph of the venue)" width="1000" height="808" loading="lazy" data-venue-art>
+      <h2 class="script-h" id="venueTitle" data-reveal>Wedding Venue</h2>
+      <p class="venue__name" data-reveal>Parappan Square International Convention Centre</p>
+      <address class="venue__addr" data-reveal>Parapan Square Road, NH 66, Venniyur,<br>Malappuram, Kerala – 676508</address>
+      <a class="btn btn--gold" id="mapBtn" data-reveal target="_blank" rel="noopener noreferrer"
+         href="https://www.google.com/maps/search/?api=1&amp;query=Parappan%20Square%20International%20Convention%20Centre%2C%20Parapan%20Square%20Road%2C%20NH%2066%2C%20Venniyur%2C%20Malappuram%2C%20Kerala%20676508">View Location</a>
+    </section>
+
+    <!-- ============ SCENE 6 — EVENT TIMELINE ============ -->
+    <section class="flow" id="events" aria-labelledby="flowTitle">
+      <div class="bg" aria-hidden="true">
+        <img src="assets/countryside.webp" alt="" width="1672" height="941" loading="lazy">
+      </div>
+      <div class="flow__veil" aria-hidden="true"></div>
+
+      <div class="flow__inner">
+        <h2 class="script-h script-h--dark" id="flowTitle" data-reveal>Event Flow</h2>
+
+        <ol class="timeline" id="timeline">
+          <li class="tl-orn tl-orn--top" aria-hidden="true">
+            <img src="assets/botanical-vine.png" alt="" width="530" height="1536" loading="lazy">
+          </li>
+          <li class="tl-item">
+            <span class="tl-dot" aria-hidden="true"></span>
+            <div class="tl-text">
+              <p class="tl-time">11:30 AM</p>
+              <h3 class="tl-title">Nikah Ceremony</h3>
+              <p class="tl-date">Saturday, 2 January 2027</p>
+              <p class="tl-place">Parappan Square International Convention Centre</p>
+            </div>
+            <div class="tl-art">
+              <img src="assets/mosque.png" alt="Decorative illustration of a mosque with botanical flourishes" width="820" height="847" loading="lazy">
+            </div>
+          </li>
+          <li class="tl-orn tl-orn--bottom" aria-hidden="true">
+            <img src="assets/botanical-vine.png" alt="" width="530" height="1536" loading="lazy">
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ SCENE 7 — WEDDING BLESSING ============ -->
+    <section class="blessing" id="blessing" aria-label="Wedding blessing">
+      <img class="blessing__orn" src="assets/gold-emblem.png" alt="" width="560" height="446" loading="lazy" data-reveal>
+      <blockquote class="blessing__quote" data-reveal>
+        <p>May Allah bless you, and bless your union, and bring you together in goodness.</p>
+      </blockquote>
+    </section>
+
+    <!-- ============ SCENE 8 — SAVE THE DATE / RSVP / FOOTER ============ -->
+    <section class="closing" id="rsvp" aria-labelledby="stdTitle">
+      <div class="bg" aria-hidden="true">
+        <img src="assets/countryside.webp" alt="" width="1672" height="941" loading="lazy">
+      </div>
+      <div class="closing__veil" aria-hidden="true"></div>
+
+      <div class="closing__inner">
+        <h2 class="label label--lg" id="stdTitle" data-reveal>Save the Date</h2>
+        <p class="names closing__names" data-reveal aria-label="Asber and Jennifer">
+          <span class="n">Asber</span>
+          <span class="amp" aria-hidden="true">&amp;</span>
+          <span class="n">Jennifer</span>
+        </p>
+        <p class="closing__date" data-reveal><time datetime="2027-01-02">Saturday, 2 January 2027</time></p>
+        <img class="closing__rule" src="assets/gold-divider.png" alt="" width="1400" height="178" loading="lazy" data-reveal>
+
+        <!-- RSVP (disabled for now). To bring it back, remove the comment markers and set CONFIG.rsvpUrl in script.js.
+        <div class="rsvp" data-reveal>
+          <!- - RSVP: set CONFIG.rsvpUrl in script.js to enable. Until then the button stays disabled. - ->
+          <a class="btn btn--dark" id="rsvpBtn" href="#rsvp" aria-disabled="true" tabindex="-1">RSVP</a>
+          <p class="rsvp__note" id="rsvpNote">RSVP details will be shared soon.</p>
+        </div>
+        -->
+
+        <div class="contact" data-reveal>
+          <h3 class="contact__title">Contact</h3>
+          <ul class="contact__list">
+            <li class="contact__item">
+              <span class="contact__num">+91 98461 00134</span>
+              <span class="contact__actions">
+                <a class="btn btn--ghost btn--sm" href="tel:+919846100134">Call</a>
+                <a class="btn btn--ghost btn--sm" href="https://wa.me/919846100134" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+              </span>
+            </li>
+            <li class="contact__item">
+              <span class="contact__num">+91 98463 40230</span>
+              <span class="contact__actions">
+                <a class="btn btn--ghost btn--sm" href="tel:+919846340230">Call</a>
+                <a class="btn btn--ghost btn--sm" href="https://wa.me/919846340230" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <button type="button" class="btn btn--dark" id="toTop">Back to Top</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Asber &amp; Jennifer &middot; 2 January 2027</p>
+    <p class="footer__credit">Developed by <a href="http://sahilmuhd.com/" target="_blank" rel="noopener noreferrer">Sahil</a></p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
   <script src="script.js" defer></script>
 </body>
 </html>
