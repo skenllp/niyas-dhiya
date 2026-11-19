@@ -1,240 +1,310 @@
-/* =========================================================
-   Asber & Jennifer — Wedding Invitation
-   GSAP + ScrollTrigger are progressive enhancements: if the CDN
-   fails, everything below still works (countdown, music, buttons).
-   ========================================================= */
+/* ==========================================================
+   Niyas & Dhiya — Wedding Reception
+   Envelope opening · music · countdown · calendar · reveals · gallery lightbox
+   ========================================================== */
+
+/* ---------- Event configuration (edit here) ----------
+   THE DATE HAS NOT BEEN CONFIRMED YET.
+   When it is, put it in `date` as 'YYYY-MM-DD' (for example '2027-01-31').
+   That single change will automatically:
+     • show the date in the reception panel,
+     • start the Days / Hours / Minutes / Seconds countdown (Asia/Kolkata time),
+     • enable the "Add to Calendar" button.
+   While `date` is empty, all date-dependent features stay hidden / disabled. */
+const CONFIG = {
+  couple: { groom: 'Niyas', bride: 'Dhiya' },
+  event: {
+    name: 'Wedding Reception',
+    date: '',                    // ← 'YYYY-MM-DD' once confirmed. Leave '' until then.
+    startTime: '17:00',          // 24-hour clock, Asia/Kolkata
+    timeLabel: '5:00 PM onwards',
+    calendarHours: 4,            // length of the calendar entry only (no end time was supplied)
+    utcOffset: '+05:30',         // Asia/Kolkata (India has no daylight saving)
+    timeZone: 'Asia/Kolkata',
+  },
+  venue: {
+    name: 'Rockdale Resort',
+    address: 'Vadapuram, behind HiLITE Mall, Malappuram, Kerala',
+    mapsUrl: 'https://maps.app.goo.gl/fGqiztXiYJxjDmhS6?g_st=iw',
+  },
+  musicVolume: 0.45,
+};
+
 (() => {
   'use strict';
 
-  /* ---------------- CONFIG — edit these values ---------------- */
-  const CONFIG = {
-    // 2 January 2027, 11:30 AM India Standard Time (UTC+05:30)
-    eventISO: '2027-01-02T11:30:00+05:30',
-
-    // Verified Google Maps share link. Leave empty to use the search link built from the venue name + address.
-    mapsUrl: '',
-    venueQuery: 'Parappan Square International Convention Centre, Parapan Square Road, NH 66, Venniyur, Malappuram, Kerala 676508',
-
-    // Contact numbers are written directly in index.html (Contact section).
-    // RSVP is commented out in index.html; set a link here when you bring it back.
-    rsvpUrl: ''
-  };
-
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const root = document.documentElement;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  /* ---------------- Fit text safely inside frames ---------------- */
-  function fitAll() {
-    $$('[data-fit]').forEach(wrap => {
-      const box = $('.fit-box', wrap);
-      const content = $('.fit-content', wrap);
-      if (!box || !content || !box.clientHeight) return;
-      // Start slightly larger than the base size, then shrink until the text sits inside the frame.
-      let fit = parseFloat(wrap.dataset.fitMax) || 1.3;
-      content.style.setProperty('--fit', fit);
-      let guard = 0;
-      while (guard++ < 60 && fit > 0.5 &&
-        (content.offsetHeight > box.clientHeight * 0.97 || content.scrollWidth > box.clientWidth + 1)) {
-        fit = Math.round((fit - 0.02) * 1000) / 1000;
-        content.style.setProperty('--fit', fit);
+  /* ---------- Event date (null until a valid date is configured) ---------- */
+  function eventStart() {
+    const d = String(CONFIG.event.date || '').trim();
+    const t = String(CONFIG.event.startTime || '').trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(d) || !/^\d{2}:\d{2}$/.test(t)) return null;
+    const dt = new Date(`${d}T${t}:00${CONFIG.event.utcOffset}`);
+    if (Number.isNaN(dt.getTime())) return null;
+    // reject impossible calendar days such as 2027-02-31
+    const check = new Intl.DateTimeFormat('en-CA', { timeZone: CONFIG.event.timeZone, year: 'numeric', month: '2-digit', day: '2-digit' }).format(dt);
+    return check === d ? dt : null;
+  }
+  const START = eventStart();
+  const END = START ? new Date(START.getTime() + CONFIG.event.calendarHours * 3600e3) : null;
+
+  /* ---------- Apply CONFIG text / links ---------- */
+  function applyConfig() {
+    $$('[data-bind="maps"]').forEach((a) => { a.href = CONFIG.venue.mapsUrl; });
+    $$('[data-bind="time"]').forEach((el) => { el.textContent = CONFIG.event.timeLabel; el.setAttribute('datetime', CONFIG.event.startTime); });
+    $$('[data-bind="venue-name"]').forEach((el) => { el.textContent = CONFIG.venue.name; });
+
+    if (!START) return;
+    const tz = CONFIG.event.timeZone;
+    $('#date-weekday').textContent = new Intl.DateTimeFormat('en-IN', { timeZone: tz, weekday: 'long' }).format(START);
+    const dv = $('#date-value');
+    dv.textContent = new Intl.DateTimeFormat('en-IN', { timeZone: tz, day: 'numeric', month: 'long', year: 'numeric' }).format(START);
+    dv.setAttribute('datetime', `${CONFIG.event.date}T${CONFIG.event.startTime}${CONFIG.event.utcOffset}`);
+    $('#date-block').hidden = false;
+    $('#date-pending').hidden = true;
+  }
+
+  /* ---------- Music ---------- */
+  function initMusic() {
+    const audio = $('#bgm');
+    const btn = $('#music-toggle');
+    if (!audio || !btn) return { start() {} };
+    let fade = null, wantPlaying = false, hiddenPause = false;
+
+    const render = () => {
+      const on = wantPlaying && !audio.paused;
+      btn.classList.toggle('is-playing', on);
+      btn.setAttribute('aria-pressed', String(on));
+      btn.setAttribute('aria-label', on ? 'Mute music' : 'Play music');
+    };
+    function fadeTo(target, ms, done) {
+      window.clearInterval(fade);
+      const from = audio.volume, steps = Math.max(1, Math.round(ms / 50)); let i = 0;
+      fade = window.setInterval(() => {
+        i++; audio.volume = Math.min(1, Math.max(0, from + (target - from) * (i / steps)));
+        if (i >= steps) { window.clearInterval(fade); if (done) done(); }
+      }, 50);
+    }
+    function play() {
+      wantPlaying = true; audio.volume = 0;
+      let p;
+      try { p = audio.play(); } catch (e) { wantPlaying = false; render(); return; }
+      const ok = () => { fadeTo(CONFIG.musicVolume, 2200); render(); };
+      if (p && p.then) p.then(ok).catch(() => { wantPlaying = false; render(); }); else ok();
+    }
+    function mute() { wantPlaying = false; fadeTo(0, 700, () => { audio.pause(); render(); }); render(); }
+
+    btn.addEventListener('click', () => { hiddenPause = false; (wantPlaying && !audio.paused) ? mute() : play(); });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (wantPlaying && !audio.paused) { hiddenPause = true; window.clearInterval(fade); audio.pause(); }
+      } else if (hiddenPause) {
+        hiddenPause = false; audio.volume = 0;
+        audio.play().then(() => fadeTo(CONFIG.musicVolume, 1500)).catch(render);
+      }
+      render();
+    });
+    audio.addEventListener('pause', render); audio.addEventListener('play', render);
+    render();
+    return { start: play };
+  }
+
+  /* ---------- Envelope ---------- */
+  function initOpening(music) {
+    const root = document.documentElement;
+    const opening = $('#opening'), seal = $('#open-btn'), main = $('#invitation');
+    if (!opening || !seal || !main) { root.classList.add('is-open'); root.classList.remove('is-locked'); initReveal(); return; }
+    main.inert = true;
+    let busy = false;
+    const finish = () => {
+      root.classList.add('is-open'); root.classList.remove('is-locked');
+      main.inert = false; window.scrollTo(0, 0); main.focus({ preventScroll: true });
+      initReveal();
+      window.setTimeout(() => { opening.hidden = true; }, reduced.matches ? 50 : 1500);
+    };
+    seal.addEventListener('click', () => {
+      if (busy) return; busy = true;
+      seal.disabled = true;
+      music.start();                                                     // inside the tap, so browsers allow playback
+      if (reduced.matches) { finish(); return; }
+      root.classList.add('is-unfolding');                                // seal stops breathing, flap hinges open
+      window.setTimeout(() => root.classList.add('is-washing'), 1500);   // seal fades, ivory wash rises
+      window.setTimeout(finish, 2250);                                   // wash dissolves into the hero photograph
+    });
+  }
+
+  /* ---------- Scroll reveals + gentle parallax ---------- */
+  function initReveal() {
+    const items = $$('.reveal'), panels = $$('.venue-panel');
+    if (!('IntersectionObserver' in window) || reduced.matches) {
+      items.forEach((e) => e.classList.add('is-visible')); panels.forEach((p) => p.classList.add('is-in'));
+    } else {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('is-visible'); io.unobserve(en.target); } });
+      }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+      items.forEach((e) => io.observe(e));
+      const pio = new IntersectionObserver((entries) => {
+        entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('is-in'); pio.unobserve(en.target); } });
+      }, { threshold: 0.2 });
+      panels.forEach((p) => pio.observe(p));
+    }
+    if (!reduced.matches) initParallax();
+  }
+
+  function initParallax() {
+    const els = $$('[data-parallax]');
+    if (!els.length) return;
+    const wide = window.matchMedia('(min-aspect-ratio: 1/1) and (min-width: 700px)');
+    let ticking = false, visible = new Set(els);
+    if ('IntersectionObserver' in window) {
+      visible = new Set();
+      const vio = new IntersectionObserver((entries) => entries.forEach((en) => (en.isIntersecting ? visible.add(en.target) : visible.delete(en.target))), { rootMargin: '120px 0px' });
+      els.forEach((el) => vio.observe(el));
+    }
+    const update = () => {
+      ticking = false;
+      const vh = window.innerHeight;
+      visible.forEach((el) => {
+        const k = el.dataset.parallax;
+        if (k === 'hero') {
+          // the hero photo drifts down slightly as the page scrolls away (phones only; framed print on wide screens stays put)
+          el.style.setProperty('--py', wide.matches ? '0px' : `${Math.min(window.scrollY, vh) * 0.18}px`);
+        } else {
+          const r = el.getBoundingClientRect();
+          // the image inside is scaled ~8%, so the drift is capped to stay within that margin (the child img inherits --py)
+          const lim = r.height * 0.035;
+          const off = Math.max(-lim, Math.min(lim, ((r.top + r.height / 2) - vh / 2) * -parseFloat(k)));
+          el.style.setProperty('--py', `${off.toFixed(1)}px`);
+        }
+      });
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; window.requestAnimationFrame(update); } };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+  }
+
+  /* ---------- Countdown (hidden until a confirmed date exists) ---------- */
+  function initCountdown() {
+    const grid = $('#countdown'), done = $('#countdown-done');
+    if (!grid || !done || !START) return;
+    const target = START.getTime();
+    const u = { days: $('[data-unit="days"]', grid), hours: $('[data-unit="hours"]', grid), minutes: $('[data-unit="minutes"]', grid), seconds: $('[data-unit="seconds"]', grid) };
+    const pad = (n) => String(n).padStart(2, '0');
+    let timer;
+    const tick = () => {
+      const diff = target - Date.now();
+      if (diff <= 0) { grid.hidden = true; done.hidden = false; window.clearInterval(timer); return; }
+      grid.hidden = false;
+      const s = Math.floor(diff / 1000);
+      u.days.textContent = pad(Math.floor(s / 86400));
+      u.hours.textContent = pad(Math.floor((s % 86400) / 3600));
+      u.minutes.textContent = pad(Math.floor((s % 3600) / 60));
+      u.seconds.textContent = pad(s % 60);
+    };
+    tick(); timer = window.setInterval(tick, 1000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) tick(); });
+  }
+
+  /* ---------- Add to calendar (.ics) — only with a confirmed date ---------- */
+  function initCalendar() {
+    const btn = $('#calendar-btn'), note = $('#calendar-note');
+    if (!btn) return;
+    if (!START || END.getTime() < Date.now()) { btn.disabled = true; return; }
+    btn.disabled = false; btn.removeAttribute('aria-describedby');
+    if (note) note.hidden = true;
+    const utc = (d) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    const esc = (t) => String(t).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+    btn.addEventListener('click', () => {
+      const { groom, bride } = CONFIG.couple;
+      const ics = [
+        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Niyas & Dhiya//Wedding Reception//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
+        'BEGIN:VEVENT',
+        `UID:reception-niyas-dhiya-${utc(START)}@invitation`,
+        `DTSTAMP:${utc(new Date())}`,
+        `DTSTART:${utc(START)}`,
+        `DTEND:${utc(END)}`,
+        `SUMMARY:${esc(`${CONFIG.event.name} of ${groom} & ${bride}`)}`,
+        `LOCATION:${esc(`${CONFIG.venue.name}, ${CONFIG.venue.address}`)}`,
+        `DESCRIPTION:${esc(`${CONFIG.event.name} of ${groom} & ${bride}, ${CONFIG.event.timeLabel}. Directions: ${CONFIG.venue.mapsUrl}`)}`,
+        `URL:${CONFIG.venue.mapsUrl}`,
+        'END:VEVENT', 'END:VCALENDAR',
+      ].join('\r\n');
+      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'niyas-dhiya-wedding-reception.ics';
+      document.body.appendChild(a); a.click(); a.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 4000);
+    });
+  }
+
+  /* ---------- Gallery lightbox ---------- */
+  function initLightbox() {
+    const box = $('#lightbox'), img = $('#lb-img'), count = $('#lb-count');
+    const btns = $$('.g-btn');
+    if (!box || !img || !btns.length) return;
+    const shots = btns.map((b) => ({ src: b.dataset.full, alt: (b.querySelector('img') || {}).alt || '' }));
+    const root = document.documentElement, main = $('#invitation'), music = $('#music-toggle');
+    let index = 0, opener = null, closeTimer = null;
+
+    const preload = (i) => { const s = shots[(i + shots.length) % shots.length]; const p = new Image(); p.src = s.src; };
+    function show(i, animate) {
+      index = (i + shots.length) % shots.length;
+      const s = shots[index];
+      const set = () => { img.src = s.src; img.alt = s.alt; count.textContent = `${index + 1} / ${shots.length}`; };
+      if (animate && !reduced.matches) {
+        img.classList.add('is-swapping');
+        window.setTimeout(() => { set(); const fin = () => img.classList.remove('is-swapping'); if (img.complete) fin(); else { img.onload = fin; img.onerror = fin; } }, 180);
+      } else set();
+      preload(index + 1); preload(index - 1);
+    }
+    function open(i, from) {
+      window.clearTimeout(closeTimer);
+      opener = from; show(i, false);
+      box.hidden = false; root.classList.add('lb-open');
+      main.inert = true; if (music) music.inert = true;
+      window.requestAnimationFrame(() => box.classList.add('is-active'));
+      $('#lb-close').focus();
+    }
+    function close() {
+      box.classList.remove('is-active'); root.classList.remove('lb-open');
+      main.inert = false; if (music) music.inert = false;
+      closeTimer = window.setTimeout(() => { box.hidden = true; img.removeAttribute('src'); }, reduced.matches ? 0 : 350);
+      if (opener) opener.focus({ preventScroll: true });
+    }
+    btns.forEach((b, i) => b.addEventListener('click', () => open(i, b)));
+    $('#lb-close').addEventListener('click', close);
+    $('#lb-prev').addEventListener('click', () => show(index - 1, true));
+    $('#lb-next').addEventListener('click', () => show(index + 1, true));
+    box.addEventListener('click', (e) => { if (e.target === box) close(); });
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { e.preventDefault(); close(); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); show(index + 1, true); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); show(index - 1, true); }
+      else if (e.key === 'Tab') {                                   // keep focus inside the dialog
+        const f = $$('button', box); const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
     });
-  }
-  let fitTimer;
-  window.addEventListener('resize', () => { clearTimeout(fitTimer); fitTimer = setTimeout(fitAll, 120); });
-  window.addEventListener('load', fitAll);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
-  fitAll();
-
-  /* ---------------- Links: map / RSVP / contact ---------------- */
-  const mapBtn = $('#mapBtn');
-  if (mapBtn) {
-    mapBtn.href = CONFIG.mapsUrl ||
-      'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(CONFIG.venueQuery);
+    // swipe left / right on touch screens
+    let sx = 0, sy = 0, tracking = false;
+    box.addEventListener('touchstart', (e) => { if (e.touches.length !== 1) return; tracking = true; sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+    box.addEventListener('touchend', (e) => {
+      if (!tracking) return; tracking = false;
+      const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) show(index + (dx < 0 ? 1 : -1), true);
+      else if (dy > 90 && Math.abs(dy) > Math.abs(dx) * 1.5) close();
+    }, { passive: true });
   }
 
-  function enable(a, href) { a.href = href; a.removeAttribute('aria-disabled'); a.removeAttribute('tabindex'); }
-
-  const rsvpBtn = $('#rsvpBtn');
-  if (rsvpBtn && CONFIG.rsvpUrl) {
-    enable(rsvpBtn, CONFIG.rsvpUrl);
-    rsvpBtn.target = '_blank'; rsvpBtn.rel = 'noopener noreferrer';
-    $('#rsvpNote').hidden = true;
-  }
-
-  /* ---------------- Countdown ---------------- */
-  const target = new Date(CONFIG.eventISO).getTime();
-  const cd = { d: $('#cdDays'), h: $('#cdHours'), m: $('#cdMinutes'), s: $('#cdSeconds') };
-  const pad = n => String(n).padStart(2, '0');
-
-  function tick() {
-    const diff = target - Date.now();
-    if (diff <= 0) {
-      $('#countGrid').hidden = true;
-      $('#countDone').hidden = false;
-      return false;
-    }
-    const s = Math.floor(diff / 1000);
-    cd.d.textContent = pad(Math.floor(s / 86400));
-    cd.h.textContent = pad(Math.floor(s % 86400 / 3600));
-    cd.m.textContent = pad(Math.floor(s % 3600 / 60));
-    cd.s.textContent = pad(s % 60);
-    return true;
-  }
-  if (tick()) {
-    const id = setInterval(() => { if (!tick()) clearInterval(id); }, 1000);
-  }
-
-  /* ---------------- Music player ---------------- */
-  const audio = $('#bgm');
-  const musicBtn = $('#musicBtn');
-  const player = $('.player');
-  const note = $('#musicNote');
-  let noteTimer;
-
-  function setPlaying(on) {
-    musicBtn.classList.toggle('is-playing', on);
-    player.classList.toggle('is-playing', on);
-    musicBtn.setAttribute('aria-pressed', String(on));
-    musicBtn.setAttribute('aria-label', on ? 'Pause wedding music' : 'Play wedding music');
-  }
-  function say(msg) {
-    note.textContent = msg;
-    clearTimeout(noteTimer);
-    noteTimer = setTimeout(() => { note.textContent = ''; }, 4000);
-  }
-  function playMusic() {
-    if (!audio) return Promise.resolve();
-    return audio.play().then(() => setPlaying(true)).catch(err => {
-      setPlaying(false);
-      if (err && err.name !== 'AbortError') {
-        // Most likely the file hasn't been added yet (assets/wedding-music.mp3).
-        console.warn('[music] Could not play assets/wedding-music.mp3 —', err.message);
-        say('Music is unavailable right now.');
-      }
-    });
-  }
-  function pauseMusic() { audio.pause(); setPlaying(false); }
-
-  if (musicBtn && audio) {
-    musicBtn.addEventListener('click', () => (audio.paused ? playMusic() : pauseMusic()));
-    audio.addEventListener('ended', () => setPlaying(false));
-    audio.addEventListener('error', () => setPlaying(false));
-  }
-
-  /* ---------------- Back to top ---------------- */
-  $('#toTop').addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
-  });
-
-  /* ---------------- Opening + animations ---------------- */
-  const intro = $('#intro');
-  const enterBtn = $('#enterBtn');
-  const hasGSAP = typeof window.gsap !== 'undefined';
-  let entered = false;
-
-  root.classList.add('is-locked');
-
-  function finishIntro() {
-    intro.classList.add('is-gone');
-    intro.setAttribute('aria-hidden', 'true');
-    root.classList.remove('is-locked');
-    window.scrollTo(0, 0);
-    setTimeout(() => { intro.style.display = 'none'; enterBtn.blur(); }, 1100);
-    const h1 = $('#heroTitle'); if (h1) h1.setAttribute('tabindex', '-1');
-  }
-
-  function enter() {
-    if (entered) return;
-    entered = true;
-    playMusic();                       // allowed: this is a user gesture
-
-    if (!hasGSAP || reduced) {
-      finishIntro();
-      return;
-    }
-    intro.style.transition = 'none';   // GSAP drives the fade
-    const tl = gsap.timeline({ defaults: { ease: 'power2.inOut' } });
-    tl.to('.intro__content', { opacity: 0, y: -10, duration: 0.9 })
-      .add(() => { root.classList.remove('is-locked'); window.scrollTo(0, 0); }, '<0.2')
-      .to('#intro', { opacity: 0, duration: 1, onComplete: () => { intro.classList.add('is-gone'); intro.style.display = 'none'; } }, '-=0.5')
-      .add(heroIn(), '-=0.7');
-    intro.setAttribute('aria-hidden', 'true');
-  }
-  enterBtn.addEventListener('click', enter);
-
-
-
-  function heroIn() {
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    tl.to('.hero__label', { opacity: 1, y: 0, duration: 1 })
-      .to('.hero__names .n, .hero__names .amp', { opacity: 1, y: 0, duration: 1.2, stagger: 0.18 }, '-=0.6')
-      .to('.hero__date', { opacity: 1, y: 0, duration: 1 }, '-=0.7')
-      .to('.hero__mansion', { opacity: 1, y: 0, duration: 1.3 }, '-=0.6')
-      .to('.player', { opacity: 1, y: 0, duration: 1.1 }, '-=0.9');
-    return tl;
-  }
-
-  if (!hasGSAP || reduced) return;   // everything stays visible and static
-
-  if (window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
-  const hasST = !!window.ScrollTrigger;
-
-  /* --- Scene 1 intro sequence --- */
-  gsap.set(['.intro__label', '.intro__names span', '.intro__enter'], { opacity: 0, y: 14 });
-  gsap.set('.intro__scene', { opacity: 0 });
-
-  gsap.timeline({ defaults: { ease: 'power2.out' }, delay: 0.2 })
-    .to('.intro__scene', { opacity: 1, duration: 1.6 })
-    .to('.intro__label', { opacity: 1, y: 0, duration: 1 }, '-=0.5')
-    .to('.intro__names span', { opacity: 1, y: 0, duration: 1.1, stagger: 0.22 }, '-=0.5')
-    .to('.intro__enter', { opacity: 1, y: 0, duration: 0.9 }, '-=0.3');
-
-  /* --- Hero starting state (revealed on Enter) --- */
-  gsap.set(['.hero__label', '.hero__names .n', '.hero__names .amp', '.hero__date', '.hero__mansion', '.player'], { opacity: 0, y: 22 });
-
-  if (!hasST) {
-    // Without ScrollTrigger just make sure nothing stays hidden after Enter.
-    return;
-  }
-
-  /* --- Parallax on the countryside painting --- */
-  $$('.hero .bg img, .invite .bg img, .flow .bg img, .closing .bg img').forEach(img => {
-    gsap.fromTo(img, { yPercent: -4 }, {
-      yPercent: 4, ease: 'none',
-      scrollTrigger: { trigger: img.closest('section'), start: 'top bottom', end: 'bottom top', scrub: true }
-    });
-  });
-
-  /* --- Generic reveals --- */
-  $$('[data-reveal]').forEach(el => {
-    gsap.from(el, {
-      opacity: 0, y: 26, duration: 1.1, ease: 'power2.out',
-      scrollTrigger: { trigger: el, start: 'top 90%', once: true }
-    });
-  });
-
-  /* --- Invitation: frame, flowers, then lines in order --- */
-  const inv = $('#inviteCard');
-  gsap.from(inv, { opacity: 0, y: 40, scale: 0.97, duration: 1.4, ease: 'power2.out',
-    scrollTrigger: { trigger: inv, start: 'top 85%', once: true } });
-  gsap.from('.il', { opacity: 0, y: 14, duration: 0.9, ease: 'power2.out', stagger: 0.12, delay: 0.35,
-    scrollTrigger: { trigger: inv, start: 'top 70%', once: true } });
-  gsap.from('.invite__rose', { opacity: 0, x: (i) => (i === 0 ? -40 : 40), duration: 1.6, ease: 'power2.out', stagger: 0.2,
-    scrollTrigger: { trigger: '#invitation', start: 'top 60%', once: true } });
-
-  /* --- Venue illustration entrance --- */
-  gsap.from('[data-venue-art]', { opacity: 0, y: 34, scale: 0.96, duration: 1.5, ease: 'power2.out',
-    scrollTrigger: { trigger: '[data-venue-art]', start: 'top 88%', once: true } });
-
-  /* --- Timeline: line draws, then items stagger --- */
-  const timeline = $('#timeline');
-  gsap.from(['.tl-orn--top', '.tl-dot', '.tl-text > *', '.tl-art', '.tl-orn--bottom'], {
-    opacity: 0, y: 22, duration: 0.9, ease: 'power2.out', stagger: 0.14,
-    scrollTrigger: { trigger: timeline, start: 'top 75%', once: true }
-  });
-
-  window.addEventListener('load', () => ScrollTrigger.refresh());
+  applyConfig();
+  initOpening(initMusic());
+  initCountdown();
+  initCalendar();
+  initLightbox();
 })();
