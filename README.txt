@@ -8,7 +8,7 @@ UPLOADING (Hostinger or any static host)
 1) DATE
   The date is set in script.js (CONFIG.event.date = '2026-12-16', Wednesday 16 December 2026).
   It drives the date in the reception panel, the countdown (Asia/Kolkata, from 5:00 PM)
-  and the "Add to Calendar" button (a 4-hour entry; change calendarHours if needed).
+  and the "Add to Calendar" button (5:00 PM – 8:00 PM; set startTime / endTime / timeLabel together).
 
 1b) RSVP
   Replies go to a Google Sheet. Follow RSVP-SETUP.txt (supplied with Code.gs), then paste the

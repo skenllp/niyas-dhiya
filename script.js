@@ -16,8 +16,8 @@ const CONFIG = {
     name: 'Wedding Reception',
     date: '2026-12-16',          // Wednesday, 16 December 2026
     startTime: '17:00',          // 24-hour clock, Asia/Kolkata
-    timeLabel: '5:00 PM onwards',
-    calendarHours: 4,            // length of the calendar entry only (no end time was supplied)
+    endTime: '20:00',            // 8:00 PM
+    timeLabel: '5:00 PM – 8:00 PM',
     utcOffset: '+05:30',         // Asia/Kolkata (India has no daylight saving)
     timeZone: 'Asia/Kolkata',
   },
@@ -51,12 +51,11 @@ const CONFIG = {
     return check === d ? dt : null;
   }
   const START = eventStart();
-  const END = START ? new Date(START.getTime() + CONFIG.event.calendarHours * 3600e3) : null;
+  const END = START ? new Date(`${CONFIG.event.date}T${CONFIG.event.endTime}:00${CONFIG.event.utcOffset}`) : null;
 
   /* ---------- Apply CONFIG text / links ---------- */
   function applyConfig() {
     $$('[data-bind="maps"]').forEach((a) => { a.href = CONFIG.venue.mapsUrl; });
-    $$('[data-bind="time"]').forEach((el) => { el.textContent = CONFIG.event.timeLabel; el.setAttribute('datetime', CONFIG.event.startTime); });
     $$('[data-bind="venue-name"]').forEach((el) => { el.textContent = CONFIG.venue.name; });
 
     if (!START) return;
