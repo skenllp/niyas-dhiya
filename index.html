@@ -231,6 +231,63 @@
       </div>
     </section>
 
+    <!-- RSVP (responses go to a Google Sheet through the Apps Script in google-apps-script/Code.gs) -->
+    <section class="section rsvp" id="rsvp" aria-labelledby="rsvp-heading">
+      <div class="rsvp-panel">
+        <p class="eyebrow reveal">Kindly Reply</p>
+        <h2 class="section-title reveal" id="rsvp-heading" style="--d:.1s">Will You Join Us?</h2>
+        <img class="sprig reveal" style="--d:.15s" src="assets/art/divider.svg" alt="" width="240" height="40" aria-hidden="true" loading="lazy">
+        <p class="rsvp-intro reveal" style="--d:.2s">Please let us know if you can celebrate with us, so we can welcome you warmly.</p>
+
+        <form class="rsvp-form reveal" id="rsvp-form" style="--d:.25s" novalidate>
+          <div class="field">
+            <label for="rsvp-name">Your name</label>
+            <input id="rsvp-name" name="name" type="text" autocomplete="name" required maxlength="80" aria-describedby="rsvp-name-err">
+            <p class="field-err" id="rsvp-name-err" hidden>Please enter your name.</p>
+          </div>
+          <div class="field">
+            <label for="rsvp-phone">Phone / WhatsApp</label>
+            <input id="rsvp-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="20" aria-describedby="rsvp-phone-err">
+            <p class="field-err" id="rsvp-phone-err" hidden>Please enter a valid phone number.</p>
+          </div>
+
+          <fieldset class="field field--choice">
+            <legend>Will you attend?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="attending" value="Yes" checked><span>Joyfully accept</span></label>
+              <label class="choice"><input type="radio" name="attending" value="No"><span>Regretfully decline</span></label>
+            </div>
+          </fieldset>
+
+          <div class="field" id="guests-field">
+            <label for="rsvp-guests">Number of guests (including you)</label>
+            <select id="rsvp-guests" name="guests">
+              <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
+              <option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="rsvp-message">Message for the couple <span class="opt">(optional)</span></label>
+            <textarea id="rsvp-message" name="message" rows="3" maxlength="500"></textarea>
+          </div>
+
+          <!-- spam trap: real guests never see or fill this -->
+          <div class="hp" aria-hidden="true"><label for="rsvp-website">Website</label><input id="rsvp-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+
+          <button type="submit" class="btn btn--solid rsvp-submit" id="rsvp-submit">Send RSVP</button>
+          <p class="rsvp-status" id="rsvp-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="rsvp-thanks" id="rsvp-thanks" tabindex="-1" hidden>
+          <p class="script-accent" aria-hidden="true">thank you</p>
+          <p class="rsvp-thanks-title" id="rsvp-thanks-title">Thank you!</p>
+          <p class="rsvp-thanks-text" id="rsvp-thanks-text"></p>
+          <button type="button" class="btn" id="rsvp-again">Send another response</button>
+        </div>
+      </div>
+    </section>
+
     <!-- Gallery -->
     <section class="section gallery" id="gallery" aria-labelledby="gallery-heading">
       <div class="container container--wide">

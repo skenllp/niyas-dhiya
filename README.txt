@@ -5,17 +5,15 @@ UPLOADING (Hostinger or any static host)
   Upload everything in this folder to the site's root (public_html on Hostinger),
   so index.html sits at the top level. No build step needed.
 
-1) ADDING THE DATE (once confirmed)
-  Open script.js. Near the top, in CONFIG, change
-      date: '',
-  to the date in YYYY-MM-DD form, for example
-      date: '2027-01-31',
-  Save and re-upload script.js. That one change will:
-    - show the weekday and date in "The Wedding Reception" panel,
-    - start the Days / Hours / Minutes / Seconds countdown (Asia/Kolkata time, from 5:00 PM),
-    - enable the "Add to Calendar" button (the calendar entry is 4 hours long; change calendarHours if needed).
-  Until then the date, countdown and calendar stay hidden or disabled, and the
-  panel shows "Date to be announced".
+1) DATE
+  The date is set in script.js (CONFIG.event.date = '2026-12-16', Wednesday 16 December 2026).
+  It drives the date in the reception panel, the countdown (Asia/Kolkata, from 5:00 PM)
+  and the "Add to Calendar" button (a 4-hour entry; change calendarHours if needed).
+
+1b) RSVP
+  Replies go to a Google Sheet. Follow RSVP-SETUP.txt (supplied with Code.gs), then paste the
+  Apps Script /exec URL into CONFIG.rsvp.endpoint in script.js. Until then the form shows
+  "RSVP is not connected yet".
 
 2) WHATSAPP PREVIEW
   index.html points og:url / og:image at https://niyas-dhiya.vercel.app/ .

@@ -4,18 +4,17 @@
    ========================================================== */
 
 /* ---------- Event configuration (edit here) ----------
-   THE DATE HAS NOT BEEN CONFIRMED YET.
-   When it is, put it in `date` as 'YYYY-MM-DD' (for example '2027-01-31').
-   That single change will automatically:
-     • show the date in the reception panel,
-     • start the Days / Hours / Minutes / Seconds countdown (Asia/Kolkata time),
-     • enable the "Add to Calendar" button.
-   While `date` is empty, all date-dependent features stay hidden / disabled. */
+   `date` ('YYYY-MM-DD') drives the date shown in the reception panel, the
+   Days / Hours / Minutes / Seconds countdown (Asia/Kolkata time) and the "Add to Calendar" button.
+   If it is ever cleared to '', those date features hide / disable themselves again.
+
+   `rsvp.endpoint`: paste the Google Apps Script Web App URL here (see google-apps-script/SETUP.txt).
+   It looks like https://script.google.com/macros/s/XXXXXXXX/exec */
 const CONFIG = {
   couple: { groom: 'Niyas', bride: 'Dhiya' },
   event: {
     name: 'Wedding Reception',
-    date: '',                    // ← 'YYYY-MM-DD' once confirmed. Leave '' until then.
+    date: '2026-12-16',          // Wednesday, 16 December 2026
     startTime: '17:00',          // 24-hour clock, Asia/Kolkata
     timeLabel: '5:00 PM onwards',
     calendarHours: 4,            // length of the calendar entry only (no end time was supplied)
@@ -26,6 +25,9 @@ const CONFIG = {
     name: 'Rockdale Resort',
     address: 'Vadapuram, behind HiLITE Mall, Malappuram, Kerala',
     mapsUrl: 'https://maps.app.goo.gl/fGqiztXiYJxjDmhS6?g_st=iw',
+  },
+  rsvp: {
+    endpoint: 'https://script.google.com/macros/s/AKfycbzveU1JfVjNz-qdD3moJLFmXzAPBHBEwDVleKEP_TU80lmfslq4eNh0Qlses-LmtZoh/exec',
   },
   musicVolume: 0.45,
 };
@@ -301,9 +303,90 @@ const CONFIG = {
     }, { passive: true });
   }
 
+
+  /* ---------- RSVP → Google Sheet ---------- */
+  function initRsvp() {
+    const form = $('#rsvp-form'), thanks = $('#rsvp-thanks');
+    if (!form || !thanks) return;
+    const status = $('#rsvp-status'), submit = $('#rsvp-submit'), guestsField = $('#guests-field');
+    const nameI = $('#rsvp-name'), phoneI = $('#rsvp-phone');
+    const attending = () => (form.querySelector('input[name="attending"]:checked') || {}).value || 'Yes';
+    const syncGuests = () => { guestsField.hidden = attending() !== 'Yes'; };
+    $$('input[name="attending"]', form).forEach((r) => r.addEventListener('change', syncGuests));
+    syncGuests();
+
+    const setErr = (input, show) => {
+      const err = document.getElementById(input.getAttribute('aria-describedby'));
+      input.setAttribute('aria-invalid', show ? 'true' : 'false');
+      if (err) err.hidden = !show;
+    };
+    const validName = () => nameI.value.trim().length >= 2;
+    const validPhone = () => /^[+]?[\d\s()-]{7,20}$/.test(phoneI.value.trim()) && phoneI.value.replace(/\D/g, '').length >= 7;
+    nameI.addEventListener('input', () => { if (nameI.getAttribute('aria-invalid') === 'true') setErr(nameI, !validName()); });
+    phoneI.addEventListener('input', () => { if (phoneI.getAttribute('aria-invalid') === 'true') setErr(phoneI, !validPhone()); });
+
+    function showThanks(isYes, name) {
+      $('#rsvp-thanks-title').textContent = `Thank you, ${name.split(' ')[0]}!`;
+      $('#rsvp-thanks-text').textContent = isYes
+        ? 'Your RSVP has been received. We can’t wait to celebrate with you at Rockdale Resort.'
+        : 'Thank you for letting us know. You will be in our thoughts on our special day.';
+      form.hidden = true; thanks.hidden = false; thanks.focus({ preventScroll: true });
+    }
+    $('#rsvp-again').addEventListener('click', () => {
+      form.reset(); syncGuests(); status.textContent = ''; status.className = 'rsvp-status';
+      thanks.hidden = true; form.hidden = false; nameI.focus();
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const okName = validName(), okPhone = validPhone();
+      setErr(nameI, !okName); setErr(phoneI, !okPhone);
+      if (!okName) { nameI.focus(); return; }
+      if (!okPhone) { phoneI.focus(); return; }
+      if ($('#rsvp-website').value) { showThanks(true, nameI.value.trim()); return; }   // bot: pretend success
+
+      const endpoint = String(CONFIG.rsvp.endpoint || '').trim();
+      if (!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(endpoint)) {
+        status.className = 'rsvp-status is-error';
+        status.textContent = 'RSVP is not connected yet. Please contact the family directly.';
+        return;
+      }
+      const isYes = attending() === 'Yes';
+      const data = new URLSearchParams({
+        name: nameI.value.trim(),
+        phone: phoneI.value.trim(),
+        attending: isYes ? 'Yes' : 'No',
+        guests: isYes ? $('#rsvp-guests').value : '0',
+        message: $('#rsvp-message').value.trim(),
+        website: '',
+      });
+      submit.disabled = true; submit.textContent = 'Sending…';
+      status.className = 'rsvp-status'; status.textContent = '';
+      let outcome = 'ok';
+      try {
+        // A form-encoded POST is a "simple" request (no CORS preflight). Apps Script answers with JSON.
+        const res = await fetch(endpoint, { method: 'POST', body: data, redirect: 'follow' });
+        const json = await res.json();
+        if (!res.ok || !json || json.result !== 'success') outcome = 'error';
+      } catch (err) {
+        // The reply could not be read (some browsers block it). Send again without reading the reply;
+        // the script ignores exact duplicates, so the row is saved once.
+        try { await fetch(endpoint, { method: 'POST', body: data, mode: 'no-cors' }); }
+        catch (err2) { outcome = 'error'; }
+      }
+      if (outcome === 'ok') showThanks(isYes, data.get('name'));
+      else {
+        status.className = 'rsvp-status is-error';
+        status.textContent = 'Sorry, something went wrong. Please check your connection and try again.';
+      }
+      submit.disabled = false; submit.textContent = 'Send RSVP';
+    });
+  }
+
   applyConfig();
   initOpening(initMusic());
   initCountdown();
   initCalendar();
   initLightbox();
+  initRsvp();
 })();
