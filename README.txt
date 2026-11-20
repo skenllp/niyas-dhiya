@@ -1,5 +1,5 @@
-NIYAS & DHIYA — WEDDING RECEPTION INVITATION
-=============================================
+NIYAS & DHIYANA — WEDDING RECEPTION INVITATION
+================================================
 
 UPLOADING (Hostinger or any static host)
   Upload everything in this folder to the site's root (public_html on Hostinger),
@@ -16,7 +16,7 @@ UPLOADING (Hostinger or any static host)
   "RSVP is not connected yet".
 
 2) WHATSAPP PREVIEW
-  index.html points og:url / og:image at https://niyas-dhiya.vercel.app/ .
+  index.html points og:url / og:image at https://niyas-dhiyana-1.vercel.app/ .
   If the domain changes, update those three URLs (og:url, og:image, twitter:image) and the canonical link.
   WhatsApp caches previews, so test with a new link or a fresh chat.
 

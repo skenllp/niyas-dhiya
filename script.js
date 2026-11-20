@@ -1,5 +1,5 @@
 /* ==========================================================
-   Niyas & Dhiya — Wedding Reception
+   Niyas & Dhiyana — Wedding Reception
    Envelope opening · music · countdown · calendar · reveals · gallery lightbox
    ========================================================== */
 
@@ -11,7 +11,7 @@
    `rsvp.endpoint`: paste the Google Apps Script Web App URL here (see google-apps-script/SETUP.txt).
    It looks like https://script.google.com/macros/s/XXXXXXXX/exec */
 const CONFIG = {
-  couple: { groom: 'Niyas', bride: 'Dhiya' },
+  couple: { groom: 'Niyas', bride: 'Dhiyana' },
   event: {
     name: 'Wedding Reception',
     date: '2026-12-16',          // Wednesday, 16 December 2026
@@ -222,7 +222,7 @@ const CONFIG = {
     btn.addEventListener('click', () => {
       const { groom, bride } = CONFIG.couple;
       const ics = [
-        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Niyas & Dhiya//Wedding Reception//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
+        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Niyas & Dhiyana//Wedding Reception//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
         'BEGIN:VEVENT',
         `UID:reception-niyas-dhiya-${utc(START)}@invitation`,
         `DTSTAMP:${utc(new Date())}`,
