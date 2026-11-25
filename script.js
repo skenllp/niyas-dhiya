@@ -22,9 +22,9 @@ const CONFIG = {
     timeZone: 'Asia/Kolkata',
   },
   venue: {
-    name: 'Rockdale Resort',
-    address: 'Vadapuram, behind HiLITE Mall, Malappuram, Kerala',
-    mapsUrl: 'https://maps.app.goo.gl/fGqiztXiYJxjDmhS6?g_st=iw',
+    name: 'THE VAZ ARENA',
+    address: 'Valanchery - Nilambur Rd, Vadapuram, Kerala 676542',
+    mapsUrl: 'https://maps.app.goo.gl/75Sc2E5WFaGJfW38A',
   },
   rsvp: {
     endpoint: 'https://script.google.com/macros/s/AKfycbzveU1JfVjNz-qdD3moJLFmXzAPBHBEwDVleKEP_TU80lmfslq4eNh0Qlses-LmtZoh/exec',
@@ -327,7 +327,7 @@ const CONFIG = {
     function showThanks(isYes, name) {
       $('#rsvp-thanks-title').textContent = `Thank you, ${name.split(' ')[0]}!`;
       $('#rsvp-thanks-text').textContent = isYes
-        ? 'Your RSVP has been received. We can’t wait to celebrate with you at Rockdale Resort.'
+        ? 'Your RSVP has been received. We can’t wait to celebrate with you at THE VAZ ARENA.'
         : 'Thank you for letting us know. You will be in our thoughts on our special day.';
       form.hidden = true; thanks.hidden = false; thanks.focus({ preventScroll: true });
     }
